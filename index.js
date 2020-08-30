@@ -1,11 +1,15 @@
 const rp = require("request-promise");
 const cheerio = require("cheerio");
+const express = require("express");
 var fs = require("fs");
+const { error } = require("console");
+
+const app = express();
 /**
  * this function extract some links and other info from a string using regex
  * @param {string} url
  * @author Mohit Kumar
- * @return {object} 
+ * @return {object}
  */
 const extract_info = (url) => {
 	const back = url.match(/(?<=back\=).*/)[0];
@@ -14,9 +18,9 @@ const extract_info = (url) => {
 	const query = back.match(/(?<=p\=).*?(?=\&)/)[0];
 	const height = back.match(/(?<=h\=).*?(?=\&)/)[0];
 	const width = back.match(/(?<=w\=).*?(?=\&)/)[0];
-    const size = back.match(/(?<=size\=).*?(?=\&)/)[0];
-    const nameX = back.match(/(?<=tt\=).*?(?=\&)/)[0]
-    const name = nameX.replace(/\+/g," ");
+	const size = back.match(/(?<=size\=).*?(?=\&)/)[0];
+	const nameX = back.match(/(?<=tt\=).*?(?=\&)/)[0];
+	const name = nameX.replace(/\+/g, " ");
 	const info = {
 		imgurl: "https://" + imgurl,
 		rurl,
@@ -24,19 +28,18 @@ const extract_info = (url) => {
 		query,
 		height,
 		width,
-        size,
-        name
+		size,
+		name,
 	};
-    // console.log(info);
-    return info
+	// console.log(info);
+	return info;
 };
 
-const baseURL = "https://in.images.search.yahoo.com";
 
 const getImages = async (query) => {
 	const html = await rp(
 		"https://in.images.search.yahoo.com/search/images?p=" + query
-	);
+	).catch((error) => console.log("Error : ", error));
 
 	const $ = cheerio.load(html);
 
@@ -46,7 +49,7 @@ const getImages = async (query) => {
 			extract_info(url);
 			const preview = $(e).children("img").prop("data-src");
 			const data = {
-                ...extract_info(url),
+				...extract_info(url),
 				preview,
 			};
 			return data;
@@ -55,13 +58,22 @@ const getImages = async (query) => {
 
 	return Promise.all(urls);
 };
-const query = "hd cars".split(" ");
+// const query = "hd cars".split(" ");
 
-getImages(query.join("+"))
-	.then((result) => {
-		console.log(result);
-		console.log(result.length);
-	})
-	.then(() => {
-		console.log("Successfullly Scrapped data");
-	});
+app.get("/:query", (req, res) => {
+	const query = req.params.query;
+	getImages(query)
+		.then((result) => {
+			res.send({ result: result });
+		})
+		.then(() => {
+			console.log("Successfullly Scrapped data (",query.replace("+"," "),")");
+		})
+		.catch((error) => {
+			console.log("error : ", error);
+		});
+});
+
+app.listen(3000, () => {
+	console.log("server started at port 3000");
+});
