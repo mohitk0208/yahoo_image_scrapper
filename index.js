@@ -59,6 +59,9 @@ const getImages = async (query) => {
 	return Promise.all(urls);
 };
 // const query = "hd cars".split(" ");
+app.get("/",(req,res)=>{
+    res.send("send requests at /:query")
+})
 
 app.get("/:query", (req, res) => {
 	const query = req.params.query;
@@ -74,6 +77,8 @@ app.get("/:query", (req, res) => {
 		});
 });
 
-app.listen(process.env.PORT || 3000, () => {
-	console.log("server started");
-});
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 8000;
+}
+app.listen(port);
