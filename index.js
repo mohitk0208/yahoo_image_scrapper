@@ -17,7 +17,6 @@ const extract_info = (url) => {
 	const back = url.match(/(?<=back\=).*/)[0];
 	const imgurl = back.match(/(?<=imgurl\=).*?(?=\&)/)[0];
 	const rurl = back.match(/(?<=rurl\=).*?(?=\&)/)[0];
-	const query = back.match(/(?<=p\=).*?(?=\&)/)[0];
 	const height = back.match(/(?<=h\=).*?(?=\&)/)[0];
 	const width = back.match(/(?<=w\=).*?(?=\&)/)[0];
 	const size = back.match(/(?<=size\=).*?(?=\&)/)[0];
@@ -26,8 +25,6 @@ const extract_info = (url) => {
 	const info = {
 		imgurl: "https://" + imgurl,
 		rurl,
-		query,
-		query,
 		height,
 		width,
 		size,
@@ -63,12 +60,8 @@ const getImages = async (query) => {
 
 app.get("/", (req, res) => {
 	res.status(200);
-	res.json({message:"send requests at /{query}"});
+	res.json({ message: "send requests at /{query}" });
 });
-
-// app.get("/favicon.ico", (req, res) => {
-// 	res.status(404)
-// });
 
 app.get("/:query", (req, res) => {
 	const query = req.params.query;
@@ -76,7 +69,7 @@ app.get("/:query", (req, res) => {
 	getImages(query)
 		.then((result) => {
 			res.status(200);
-			res.json({ result });
+			res.json({ query, result });
 		})
 		.then(() => {
 			console.log(`Successfullly Scrapped data (${query})`);
