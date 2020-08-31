@@ -35,7 +35,6 @@ const extract_info = (url) => {
 	return info;
 };
 
-
 const getImages = async (query) => {
 	const html = await rp(
 		"https://in.images.search.yahoo.com/search/images?p=" + query
@@ -58,10 +57,15 @@ const getImages = async (query) => {
 
 	return Promise.all(urls);
 };
-// const query = "hd cars".split(" ");
-app.get("/",(req,res)=>{
-    res.send("send requests at /:query")
-})
+
+app.get("/", (req, res) => {
+	res.send("send requests at /{query}");
+});
+
+app.get("/favicon.ico", (req, res) => {
+	res.statusCode = 404;
+	res.send("");
+});
 
 app.get("/:query", (req, res) => {
 	const query = req.params.query;
@@ -70,7 +74,11 @@ app.get("/:query", (req, res) => {
 			res.send({ result: result });
 		})
 		.then(() => {
-			console.log("Successfullly Scrapped data (",query.replace("+"," "),")");
+			console.log(
+				"Successfullly Scrapped data (",
+				query.replace("+", " "),
+				")"
+			);
 		})
 		.catch((error) => {
 			console.log("error : ", error);
@@ -79,6 +87,6 @@ app.get("/:query", (req, res) => {
 
 let port = process.env.PORT;
 if (port == null || port == "") {
-  port = 8000;
+	port = 8000;
 }
 app.listen(port);
