@@ -1,10 +1,12 @@
 const rp = require("request-promise");
 const cheerio = require("cheerio");
 const express = require("express");
-var fs = require("fs");
-const { error } = require("console");
+const bodyParser = require("body-parser");
 
 const app = express();
+
+app.use(bodyParser.json());
+
 /**
  * this function extract some links and other info from a string using regex
  * @param {string} url
@@ -31,7 +33,6 @@ const extract_info = (url) => {
 		size,
 		name,
 	};
-	// console.log(info);
 	return info;
 };
 
@@ -42,8 +43,10 @@ const getImages = async (query) => {
 
 	const $ = cheerio.load(html);
 
-	const urls = $("#sres li a")
-		.map(async (i, e) => {
+	const links = $("#sres li a");
+
+	const urls = links
+		.map((i, e) => {
 			const url = decodeURIComponent($(e).prop("href"));
 			extract_info(url);
 			const preview = $(e).children("img").prop("data-src");
@@ -59,29 +62,27 @@ const getImages = async (query) => {
 };
 
 app.get("/", (req, res) => {
-	res.send("send requests at /{query}");
+	res.status(200);
+	res.json({message:"send requests at /{query}"});
 });
 
-app.get("/favicon.ico", (req, res) => {
-	res.statusCode = 404;
-	res.send("");
-});
+// app.get("/favicon.ico", (req, res) => {
+// 	res.status(404)
+// });
 
 app.get("/:query", (req, res) => {
 	const query = req.params.query;
+
 	getImages(query)
 		.then((result) => {
-			res.send({ result: result });
+			res.status(200);
+			res.json({ result });
 		})
 		.then(() => {
-			console.log(
-				"Successfullly Scrapped data (",
-				query.replace("+", " "),
-				")"
-			);
+			console.log(`Successfullly Scrapped data (${query})`);
 		})
-		.catch((error) => {
-			console.log("error : ", error);
+		.catch((err) => {
+			console.log("error : ", err);
 		});
 });
 
@@ -89,4 +90,4 @@ let port = process.env.PORT;
 if (port == null || port == "") {
 	port = 8000;
 }
-app.listen(port);
+app.listen(port, () => console.log("Server started"));
