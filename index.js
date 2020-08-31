@@ -63,6 +63,11 @@ app.get("/", (req, res) => {
 	res.json({ message: "send requests at /{query}" });
 });
 
+app.get("/testsejvnajergu423bar453knmf423oi8r789egunaljnv", (req, res) => {
+	res.status(200);
+	res.json({ message: "server is running" });
+});
+
 app.get("/:query", (req, res) => {
 	const query = req.params.query;
 
