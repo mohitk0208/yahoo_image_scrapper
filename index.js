@@ -81,7 +81,7 @@ app.get("/testsejvnajergu423bar453knmf423oi8r789egunaljnv", (req, res) => {
 	});
 });
 
-app.get("/:query", (req, res) => {
+app.get("/api/getimage/:query", (req, res) => {
 	const query = req.params.query;
 
 	getImages(query)
