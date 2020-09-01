@@ -20,8 +20,7 @@ const extract_info = (url) => {
 	const height = back.match(/(?<=h\=).*?(?=\&)/)[0];
 	const width = back.match(/(?<=w\=).*?(?=\&)/)[0];
 	const size = back.match(/(?<=size\=).*?(?=\&)/)[0];
-	const nameX = back.match(/(?<=tt\=).*?(?=\&)/)[0];
-	const name = nameX.replace(/\+/g, " ");
+	const name = back.match(/(?<=tt\=).*?(?=\&)/)[0].replace(/\+/g, " ");
 	const info = {
 		imgurl: "https://" + imgurl,
 		rurl,
@@ -63,38 +62,46 @@ app.get("/", (req, res) => {
 	res.json({ message: "send requests at /{query}" });
 });
 
+const response = {
+	query: "",
+	result: [
+		{
+			imgurl: "",
+			rurl: "",
+			height: "",
+			width: "",
+			size: "",
+			name: "",
+			preview: "",
+		},
+	],
+};
+
 app.get("/testsejvnajergu423bar453knmf423oi8r789egunaljnv", (req, res) => {
-	res.status(200);
-	res.json({
-		query: "",
-		result: [
-			{
-				imgurl: "",
-				rurl: "",
-				height: "",
-				width: "",
-				size: "",
-				name: "",
-				preview: "",
-			},
-		],
-	});
+	res.status(200).json(response);
 });
 
-app.get("/api/getimage/:query", (req, res) => {
+app.get("/api/getimage/:query", async (req, res) => {
 	const query = req.params.query;
+	try {
+		const result = await getImages(query);
+		res.status(200).json({ query, result });
+		console.log(`Successfullly scrapped data (${query})`);
+	} catch (err) {
+		console.log("ERROR :", err);
+	}
 
-	getImages(query)
-		.then((result) => {
-			res.status(200);
-			res.json({ query, result });
-		})
-		.then(() => {
-			console.log(`Successfullly Scrapped data (${query})`);
-		})
-		.catch((err) => {
-			console.log("error : ", err);
-		});
+	// .then((result) => {
+	// 	res.status(200);
+	// 	res.json({ query, result });
+	// });
+
+	// .then(() => {
+	// 	console.log(`Successfullly Scrapped data (${query})`);
+	// })
+	// .catch((err) => {
+	// 	console.log("error : ", err);
+	// });
 });
 
 let port = process.env.PORT;
