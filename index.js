@@ -65,7 +65,20 @@ app.get("/", (req, res) => {
 
 app.get("/testsejvnajergu423bar453knmf423oi8r789egunaljnv", (req, res) => {
 	res.status(200);
-	res.json({ message: "server is running" });
+	res.json({
+		query: "",
+		result: [
+			{
+				imgurl: "",
+				rurl: "",
+				height: "",
+				width: "",
+				size: "",
+				name: "",
+				preview: "",
+			},
+		],
+	});
 });
 
 app.get("/:query", (req, res) => {
