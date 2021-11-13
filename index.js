@@ -91,17 +91,6 @@ app.get("/api/getimage/:query", async (req, res) => {
 		console.log("ERROR :", err);
 	}
 
-	// .then((result) => {
-	// 	res.status(200);
-	// 	res.json({ query, result });
-	// });
-
-	// .then(() => {
-	// 	console.log(`Successfullly Scrapped data (${query})`);
-	// })
-	// .catch((err) => {
-	// 	console.log("error : ", err);
-	// });
 });
 
 let port = process.env.PORT;
