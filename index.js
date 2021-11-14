@@ -38,12 +38,11 @@ const getImages = async (query) => {
 
   const $ = cheerio.load(html);
 
-  const links = $("#sres li a");
+  const links = $("#sres li a.img");
 
   const urls = links
     .map((i, e) => {
       const url = decodeURIComponent($(e).prop("href"));
-      extract_info(url);
       const preview = $(e).children("img").prop("data-src");
       const data = {
         ...extract_info(url),
