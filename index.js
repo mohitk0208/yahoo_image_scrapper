@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 /**
  * this function extract some links and other info from a string using regex
