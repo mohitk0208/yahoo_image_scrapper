@@ -57,7 +57,7 @@ const getImages = async (query) => {
 
 app.get("/", (req, res) => {
   res.status(200);
-  res.json({ message: "send requests at /{query}" });
+  res.json({ message: "send requests at /api/getimage/:query" });
 });
 
 const response = {
