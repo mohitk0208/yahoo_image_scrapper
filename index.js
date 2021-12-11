@@ -75,7 +75,7 @@ const response = {
   ],
 };
 
-app.get("/testsejvnajergu423bar453knmf423oi8r789egunaljnv", (req, res) => {
+app.get("/test", (req, res) => {
   res.status(200).json(response);
 });
 
