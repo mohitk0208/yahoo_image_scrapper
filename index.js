@@ -103,8 +103,6 @@ app.listen(port, () => console.log(`Server started at http://localhost:${port} `
 
 
 /**
- * -> separate the api routes (make routes folder and controllers folder)
- * -> make a sites folder that contain scrapping scripts for all other sites in different folders
  * -> make a views folder that contain the frontend usage of the complete api.
  *
  * -> add rate limiting to the api
