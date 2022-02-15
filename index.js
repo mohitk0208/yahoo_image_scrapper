@@ -1,9 +1,17 @@
 const rp = require("request-promise");
 const cheerio = require("cheerio");
 const express = require("express");
+const cors = require("cors")
 
 const app = express();
 const yahooRoutes = require("./routes/yahoo");
+
+const corsOptions = {
+  origin: "*",
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
