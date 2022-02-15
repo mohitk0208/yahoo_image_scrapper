@@ -3,6 +3,7 @@ const cheerio = require("cheerio");
 const express = require("express");
 
 const app = express();
+const yahooRoutes = require("./routes/yahoo");
 
 app.use(express.json());
 
@@ -92,8 +93,20 @@ app.get("/api/getimage/:query", async (req, res) => {
 
 });
 
+app.use("/api/yahoo", yahooRoutes);
+
 let port = process.env.PORT;
 if (port == null || port == "") {
   port = 8000;
 }
 app.listen(port, () => console.log(`Server started at http://localhost:${port} `));
+
+
+/**
+ * -> make a views folder that contain the frontend usage of the complete api.
+ *
+ * -> add rate limiting to the api
+ * -> add error handling to the api
+ * -> add documentation to the api
+ * -> make README file
+ */
