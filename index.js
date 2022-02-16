@@ -2,9 +2,13 @@ const rp = require("request-promise");
 const cheerio = require("cheerio");
 const express = require("express");
 const cors = require("cors")
+const apiSlowDown = require("./middlewares/apiSlowDown")
 
 const app = express();
+
+
 const imagesRoutes = require("./routes/images-route");
+
 
 const corsOptions = {
   origin: "*",
@@ -101,7 +105,7 @@ app.get("/api/getimage/:query", async (req, res) => {
 
 });
 
-app.use("/api/images", imagesRoutes)
+app.use("/api/images", apiSlowDown, imagesRoutes)
 
 let port = process.env.PORT;
 if (port == null || port == "") {
