@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors")
 
 const app = express();
-const yahooRoutes = require("./routes/yahoo");
+const imagesRoutes = require("./routes/images-route");
 
 const corsOptions = {
   origin: "*",
@@ -101,7 +101,7 @@ app.get("/api/getimage/:query", async (req, res) => {
 
 });
 
-app.use("/api/yahoo", yahooRoutes);
+app.use("/api/images", imagesRoutes)
 
 let port = process.env.PORT;
 if (port == null || port == "") {
